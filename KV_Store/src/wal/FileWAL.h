@@ -2,13 +2,14 @@
 #include "../core/kvstore/IWriteAheadLog.h"
 #include <cstdio>
 #include <mutex>
+#include <shared_mutex>
 #include <string>
 
 class FileWAL: public IWriteAheadLog{
 private:
    FILE* fileHandle;
    std::string path;
-   std::mutex writeMutex;
+   std::shared_mutex rwMutex;
 
 public:
    FileWAL(std::string p): path(std::move(p)){
@@ -18,7 +19,8 @@ public:
       }
    }
    FileOffset append(const LogEntry& log) override;
-   std::vector<LogEntry> replay() override;
+   std::vector<std::pair<LogEntry, FileOffset>> replay() override;
+   Record read(const FileOffset& offset) override;
    void sync() override;
    ~FileWAL();
 };

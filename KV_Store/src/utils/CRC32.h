@@ -28,7 +28,7 @@ namespace utils
          uint8_t byte = data[i];
          rem=(rem>>8)^crc32Table[(rem^byte)&0xFF];
       }
-      return rem^0XFFFFFFF;
+      return rem^0XFFFFFFFF;
    }
 
 }

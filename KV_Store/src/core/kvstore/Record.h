@@ -22,6 +22,16 @@ public:
       timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
    }
 
+   const std::string& getKey() const{
+      return key;
+   }
+
+   const std::string& getValue() const { return value;}
+   
+   bool isTomb() const{
+      return tombstone;
+   }
+
    std::vector<uint8_t> serialize() const{
       std::vector<uint8_t> buffer(size());
       size_t offset=0;
@@ -30,11 +40,11 @@ public:
          offset+=len;
       };
 
-      size_t kLen = key.length();
+      size_t kLen = static_cast<uint32_t>(key.length());
       write(&kLen, sizeof(kLen));
       write(key.data(), kLen);
 
-      size_t vLen = value.length();
+      size_t vLen = static_cast<uint32_t>(value.length());
       write(&vLen, sizeof(vLen));
       write(value.data(), vLen);
 
@@ -51,12 +61,12 @@ public:
          offset+=len;
       };
 
-      size_t kLen;
+      uint32_t kLen;
       read(&kLen, sizeof(kLen));
       std::string k(reinterpret_cast<const char*>(buffer.data()+offset), kLen);
       offset+=kLen;
 
-      size_t vLen;
+      uint32_t vLen;
       read(&vLen, sizeof(vLen));
       std::string v(reinterpret_cast<const char*>(buffer.data()+offset), vLen);
       offset+=vLen;
@@ -66,6 +76,11 @@ public:
       uint64_t ts; read(&ts, sizeof(ts));
       
       return Record(std::move(k), std::move(v), tomb, ts);
+   }
+
+   static Record createTomb(const std::string& key){
+      uint64_t ts = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+      return Record(key, "", true,ts);
    }
 
    size_t size() const{

@@ -19,7 +19,13 @@ public:
       checksum = utils::CRC32(bytes.data(), bytes.size());
    }
 
-   const Record& getter()const { return record;}
+   const Record& getRecord() const{
+      return record;
+   }
+
+   const uint32_t getcs() const{
+      return checksum;
+   }
 
    std::vector<uint8_t> encode() const{
       std::vector<uint8_t> bytes = record.serialize();
@@ -35,8 +41,8 @@ public:
 
    LogEntry static decode(const std::vector<uint8_t>& buffer) {
       uint32_t c;
-      std::memcpy(&c, buffer.data()+4, sizeof(uint32_t));
-      std::vector<uint8_t> bytes(buffer.begin()+8, buffer.end());
+      std::memcpy(&c, buffer.data()+sizeof(uint32_t), sizeof(uint32_t));
+      std::vector<uint8_t> bytes(buffer.begin()+(sizeof(uint32_t)*2), buffer.end());
       return LogEntry(Record::deserialize(bytes),c);
    }
 
