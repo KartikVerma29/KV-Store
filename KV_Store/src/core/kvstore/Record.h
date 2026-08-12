@@ -40,11 +40,11 @@ public:
          offset+=len;
       };
 
-      size_t kLen = static_cast<uint32_t>(key.length());
+      uint32_t kLen = static_cast<uint32_t>(key.length());
       write(&kLen, sizeof(kLen));
       write(key.data(), kLen);
 
-      size_t vLen = static_cast<uint32_t>(value.length());
+      uint32_t vLen = static_cast<uint32_t>(value.length());
       write(&vLen, sizeof(vLen));
       write(value.data(), vLen);
 
@@ -84,7 +84,7 @@ public:
    }
 
    size_t size() const{
-      return sizeof(bool) + sizeof(uint64_t) + (sizeof(size_t)*2) + key.length() + value.length();
+      return sizeof(bool) + sizeof(uint64_t) + (sizeof(uint32_t)*2) + key.length() + value.length();
    };
 
 };

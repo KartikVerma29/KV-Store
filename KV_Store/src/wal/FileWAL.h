@@ -4,6 +4,7 @@
 #include <mutex>
 #include <shared_mutex>
 #include <string>
+#include <stdexcept>
 
 class FileWAL: public IWriteAheadLog{
 private:

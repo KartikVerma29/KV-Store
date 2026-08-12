@@ -12,8 +12,6 @@ public:
    void put(const std::string& key,const FileOffset& offset) override{
       table[key] = offset;
    }
-
-
    std::optional<FileOffset> get(const std::string& key) const override;
 
    void remove(const std::string& key) override{

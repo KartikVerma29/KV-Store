@@ -1,3 +1,11 @@
 Design
 Design/
 .vscode
+.codegraphy/*
+.codegraphy/
+KV_Store/build
+build/
+KV_Store/.cache
+*.log
+*.bin
+*.txt
