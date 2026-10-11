@@ -33,7 +33,3 @@ world
 
 - WAL grows unbounded — no compaction yet (planned next)
 - Single-node, embedded only — no network layer
-
-## Design
-
-See `docs/` for the full requirements and UML design reference.
